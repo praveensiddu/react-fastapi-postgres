@@ -1,12 +1,29 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from backend.fastapi_postgres import models, schemas
-from backend.fastapi_postgres import engine, get_db
+from backend.fastapi_postgres.database import engine, get_db
 import uvicorn
 import os
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+
+# ----------------------
+# React Static Serving
+# ----------------------
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    index_file = os.path.join(static_dir, "index.html")
+    if os.path.exists(index_file):
+        return FileResponse(index_file)
+    return {"error": "Frontend not built. Run npm run build in frontend/"}
+
 
 @app.post("/users/", response_model=schemas.UserOut)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
