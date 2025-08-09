@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
-from fastapi_postgres import models, schemas
-from fastapi_postgres.database import engine, get_db
+from backend.fastapi_postgres import models, schemas
+from backend.fastapi_postgres import engine, get_db
 import uvicorn
 import os
 models.Base.metadata.create_all(bind=engine)
