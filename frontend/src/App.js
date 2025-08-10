@@ -1,5 +1,5 @@
 import React from "react";
-import UsersList from "./UsersList";
+import UsersList from "./UserList";
 
 export default function App() {
   return (

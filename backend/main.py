@@ -12,13 +12,15 @@ app = FastAPI()
 
 
 # ----------------------
-# React Static Serving
+# Serving React Static files from /static folder
 # ----------------------
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
-@app.get("/{full_path:path}")
-async def serve_spa(full_path: str):
+
+# This function loads the index.html
+@app.get("/")
+async def serve_spa():
     index_file = os.path.join(static_dir, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)

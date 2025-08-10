@@ -8,7 +8,9 @@ __pycache__/
 
 # Distribution / packaging
 .idea
+package-lock.json
 .Python
+node_modules/
 build/
 develop-eggs/
 dist/
