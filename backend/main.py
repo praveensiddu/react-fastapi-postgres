@@ -14,14 +14,15 @@ app = FastAPI()
 # ----------------------
 # Serving React Static files from /static folder
 # ----------------------
-static_dir = os.path.join(os.path.dirname(__file__), "static")
+static_build_outdir = os.path.join(os.path.dirname(__file__), "build_outdir")
+static_dir = f'{static_build_outdir}{os.sep}static'
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 
 # This function loads the index.html
 @app.get("/")
 async def serve_spa():
-    index_file = os.path.join(static_dir, "index.html")
+    index_file = os.path.join(static_build_outdir, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)
     return {"error": "Frontend not built. Run npm run build in frontend/"}
