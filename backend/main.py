@@ -32,7 +32,15 @@ async def serve_spa():
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = models.User(**user.dict())
     db.add(db_user)
-    db.commit()
+    try:
+        db.commit()
+    except Exception as e:
+        print(e)
+        # TODO return http error code for incorrect data
+        raise HTTPException(
+            status_code=400,
+            detail=f"Bad request: {str(e)}"  # Optionally include the error message
+        )
     db.refresh(db_user)
     return db_user
 
